@@ -13,7 +13,7 @@ const DefaultLayout: FC = ({ children }) => {
   const { updateUser } = useAuth()
   const router = useRouter()
 
-  const { user } = getUser(1)
+  const { user } = getUser()
 
   const currentYear = useMemo(() => new Date().getFullYear(), [])
 
