@@ -1,34 +1,74 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Production
 
-## Getting Started
+This project can be accessed in production clicking [`right here`](https://working-hours.adrielgarcia.dev/).
 
-First, run the development server:
+## Development Environment:
 
+First: install dependencies:
+
+Project's root dir:
 ```bash
-npm run dev
-# or
+yarn
+```
+
+Second: if you want to change the mongoDB address, it can be done in
+.env.development:
+
+```
+MONGODB_URI
+```
+
+Run the development server:
+
+Project's root dir:
+```bash
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+And finally you can open [`http://localhost:3000`](http://localhost:3000) with your browser
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Project structure
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+### Client
+```
+src/
+  - __tests__/
+  - pages/
+    - index.tsx
+    - history.tsx
+  - components/
+  - hooks/
+  - styles/
+  - services/
+  - repositories/
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### Server
+```
+src/
+  - pages/
+    - api/
+      - date (GET) -> Return current date
+      - user (GET) -> Return user data
+      - register/:userId (POST) -> Create a new register
+      - history/:userId (GET) -> List user's registers history
+  - models/
+    - Register.ts
+    - User.ts
+  - utils/
+```
 
-## Learn More
+### @types
+Types are shared between client and server once they run in same server graceful to Next.js :heart_eyes:
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Features:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+  - [ x ] Register time by user
+  - [ x ] Show user data: <b>name, position and last register</b>
+  - [ x ] Show current date/time from server
+  - [ x ] List register's history: <b>date, arriving and exiting, break times and worked hours</b>
+  - [  ] Authentication email/password
+  - [  ] Authentication Google (Auth0)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Created by [`@AdrielGarciaS`](https://github.com/AdrielGarciaS).
