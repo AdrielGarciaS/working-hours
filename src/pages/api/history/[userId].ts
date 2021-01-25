@@ -3,16 +3,16 @@ import {
   compareDesc,
   isSameDay,
   parseISO,
-  differenceInHours,
+  differenceInMinutes,
 } from 'date-fns'
 import { NextApiHandler } from 'next'
 
-import dbConnect from '@server/utils/dbConnect'
-import Register from '@server/models/Register'
+import dbConnect from 'server/utils/dbConnect'
+import Register from 'server/models/Register'
 
 interface IBreakData {
   breaks: IBreak[]
-  breakHours: number
+  breakMinutes: number
 }
 
 const historyRouter: NextApiHandler = async (request, response) => {
@@ -73,43 +73,53 @@ const historyRouter: NextApiHandler = async (request, response) => {
           arriving: arrivingFromBreak.toISOString(),
         }
 
-        const breakHours = differenceInHours(arrivingFromBreak, exitingToBreak)
+        const breakMinutes = differenceInMinutes(
+          arrivingFromBreak,
+          exitingToBreak,
+        )
 
         const _breaksData: IBreakData = {
           breaks: [...breaksData.breaks, breakData],
-          breakHours: breaksData.breakHours + breakHours,
+          breakMinutes: breaksData.breakMinutes + breakMinutes,
         }
 
         return _breaksData
       },
-      { breakHours: 0, breaks: [] } as IBreakData,
+      { breakMinutes: 0, breaks: [] } as IBreakData,
     )
 
-    const workedHours = allRegistersInDay.reduce((workedHours, reg, index) => {
-      const isArrivingRegister = index % 2 === 0
-      const isLastRegister = index > 0 && index + 1 === allRegistersInDay.length
+    const workedMinutes = allRegistersInDay.reduce(
+      (workedMinutes, reg, index) => {
+        const isArrivingRegister = index % 2 === 0
+        const isLastRegister =
+          index > 0 && index + 1 === allRegistersInDay.length
 
-      if (!isArrivingRegister || isLastRegister) return workedHours
+        if (!isArrivingRegister || isLastRegister) return workedMinutes
 
-      const nextRegister = allRegistersInDay[index + 1]
+        const nextRegister = allRegistersInDay[index + 1]
 
-      if (!nextRegister) {
-        const workedHoursUntilNow = differenceInHours(new Date(), reg.date) + 1
+        if (!nextRegister) {
+          const workedMinutesUntilNow = differenceInMinutes(
+            new Date(),
+            reg.date,
+          )
 
-        return workedHours + workedHoursUntilNow
-      }
+          return workedMinutes + workedMinutesUntilNow
+        }
 
-      const quantityHours = differenceInHours(nextRegister.date, reg.date) + 1
+        const quantityHours = differenceInMinutes(nextRegister.date, reg.date)
 
-      return workedHours + quantityHours
-    }, 0)
+        return workedMinutes + quantityHours
+      },
+      0,
+    )
 
     const dayHistory: IHistory = {
       arriving: firstRegisterOnDay.date.toISOString(),
       exiting: lastRegisterOnDay?.date?.toISOString() || null,
       date: register.date.toISOString(),
       breaks: breaksData.breaks,
-      workedHours: workedHours - breaksData.breakHours,
+      workedMinutes: workedMinutes - breaksData.breakMinutes,
     }
 
     const _history = [...history, dayHistory]

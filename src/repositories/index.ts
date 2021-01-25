@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import api from '@services/api'
+import api from 'services/api'
 
 interface IGetUserResponse {
   data: {
@@ -65,14 +65,14 @@ interface IGetHistoryResponse {
 }
 
 export const getHistory = (id: string) => {
-  const { data, isValidating } = useSWR<IGetHistoryResponse>(
-    `history/${id}`,
-    api.get,
-  )
+  const path = id ? `history/${id}` : null
 
-  if (!data?.data || isValidating) return { history: [] as IHistory[] }
+  const { data, isValidating } = useSWR<IGetHistoryResponse>(path, api.get)
+
+  if (!data?.data || isValidating)
+    return { history: [] as IHistory[], loading: true }
 
   const { history } = data.data
 
-  return { history }
+  return { history, loading: false }
 }

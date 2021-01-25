@@ -1,10 +1,10 @@
 import 'antd/dist/antd.css'
 import { FC } from 'react'
 
-import GlobalStyle from '@styles/GlobalStyle'
-import DefaultLayout from '@components/DefaultLayout'
+import GlobalStyle from 'styles/GlobalStyle'
+import DefaultLayout from 'components/DefaultLayout'
 
-import Providers from '@hooks/index'
+import Providers from 'hooks/index'
 
 interface IMyAppProps {
   Component: FC

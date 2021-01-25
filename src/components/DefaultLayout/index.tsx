@@ -4,8 +4,8 @@ import { useRouter } from 'next/router'
 import { Layout, Menu, Divider } from 'antd'
 
 import { Content } from './styles'
-import { getUser } from '@repositories/index'
-import { useAuth } from '@hooks/auth'
+import { getUser } from 'repositories'
+import { useAuth } from 'hooks/auth'
 
 const { Header, Footer } = Layout
 
@@ -17,7 +17,7 @@ const DefaultLayout: FC = ({ children }) => {
 
   const currentYear = useMemo(() => new Date().getFullYear(), [])
 
-  const selectedMenu = useMemo(() => router.pathname, [router.pathname])
+  const selectedMenu = useMemo(() => router.route, [router.route])
 
   useEffect(() => {
     if (!user) return

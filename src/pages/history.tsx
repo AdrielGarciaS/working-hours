@@ -1,14 +1,14 @@
 import { FC, useMemo } from 'react'
 import { Table } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
-import { getHistory } from '@repositories/index'
+import { getHistory } from 'repositories'
 import { parseISO } from 'date-fns'
 import {
   formatExtendedDate,
-  formatHourMinute,
-  formatNumberToHours,
-} from '@services/format'
-import { useAuth } from '@hooks/auth'
+  formatHourMinuteAmPm,
+  formatMinutesToHours,
+} from 'services/format'
+import { useAuth } from 'hooks/auth'
 
 const columns: ColumnsType = [
   {
@@ -36,36 +36,47 @@ const columns: ColumnsType = [
 const History: FC = () => {
   const { user } = useAuth()
 
-  const { history } = getHistory(user._id)
+  const { history, loading } = getHistory(user._id)
 
   const formattedHistory = useMemo(
     () =>
       history.map(history => {
         const formattedBreaks = history.breaks.map(data => {
-          const formattedExiting = formatHourMinute(parseISO(data.exiting))
-          const formattedArriving = formatHourMinute(parseISO(data.arriving))
+          const formattedExiting = formatHourMinuteAmPm(parseISO(data.exiting))
+          const formattedArriving = formatHourMinuteAmPm(
+            parseISO(data.arriving),
+          )
 
           return `${formattedExiting} - ${formattedArriving}`
         })
 
         const breaks = formattedBreaks.join('; ')
 
-        const formattedArriving = formatHourMinute(parseISO(history.arriving))
+        const formattedArriving = formatHourMinuteAmPm(
+          parseISO(history.arriving),
+        )
         const formattedExiting = history.exiting
-          ? formatHourMinute(parseISO(history.exiting))
+          ? formatHourMinuteAmPm(parseISO(history.exiting))
           : 'Pending'
 
         return {
           date: formatExtendedDate(parseISO(history.date)),
           arrivingExiting: `${formattedArriving} - ${formattedExiting}`,
           break: breaks,
-          workedHours: formatNumberToHours(history.workedHours),
+          workedHours: formatMinutesToHours(history.workedMinutes),
         }
       }),
     [history],
   )
 
-  return <Table columns={columns} dataSource={formattedHistory} />
+  return (
+    <Table
+      columns={columns}
+      dataSource={formattedHistory}
+      pagination={false}
+      loading={loading}
+    />
+  )
 }
 
 export default History

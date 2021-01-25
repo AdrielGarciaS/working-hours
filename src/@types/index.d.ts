@@ -21,5 +21,5 @@ interface IHistory {
   arriving: string
   exiting: string
   breaks: IBreak[]
-  workedHours: number
+  workedMinutes: number
 }

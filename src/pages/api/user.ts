@@ -1,9 +1,9 @@
 import { compareAsc } from 'date-fns'
 import { NextApiHandler } from 'next'
 
-import dbConnect from '@server/utils/dbConnect'
-import User from '@server/models/User'
-import Register from '@server/models/Register'
+import dbConnect from 'server/utils/dbConnect'
+import User from 'server/models/User'
+import Register from 'server/models/Register'
 
 const userRouter: NextApiHandler = async (request, response) => {
   const { method } = request

@@ -1,7 +1,7 @@
 import { NextApiHandler } from 'next'
 
-import dbConnect from '@server/utils/dbConnect'
-import Register from '@server/models/Register'
+import dbConnect from 'server/utils/dbConnect'
+import Register from 'server/models/Register'
 
 const registerRouter: NextApiHandler = async (request, response) => {
   const { method, query } = request
