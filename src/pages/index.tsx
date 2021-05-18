@@ -15,7 +15,7 @@ import {
 import { formatCurrentDateTime, formatLastRegister } from 'services/format'
 
 const Home: FC = () => {
-  const [loading, setLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const { user } = useAuth()
 
@@ -36,11 +36,11 @@ const Home: FC = () => {
   }, [currentDate])
 
   const handleRegister = async () => {
-    setLoading(true)
+    setIsLoading(true)
 
     const { success, register } = await createRegister(user._id)
 
-    setLoading(false)
+    setIsLoading(false)
 
     if (!success) {
       message.error("Wasn't be able to register, please try again")
@@ -88,7 +88,7 @@ const Home: FC = () => {
           icon={<CheckCircleOutlined style={{ fontSize: 20 }} />}
           size="large"
           onClick={handleRegister}
-          loading={loading}
+          loading={isLoading}
         >
           Register
         </RegisterButton>

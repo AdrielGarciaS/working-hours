@@ -9,15 +9,15 @@ import { useAuth } from 'hooks/auth'
 
 const { Header, Footer } = Layout
 
+const currentYear = new Date().getFullYear()
+
 const DefaultLayout: FC = ({ children }) => {
   const { updateUser } = useAuth()
-  const router = useRouter()
+  const { route } = useRouter()
 
   const { user } = getUser()
 
-  const currentYear = useMemo(() => new Date().getFullYear(), [])
-
-  const selectedMenu = useMemo(() => router.route, [router.route])
+  const selectedMenu = useMemo(() => route, [route])
 
   useEffect(() => {
     if (!user) return
