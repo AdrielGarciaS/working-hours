@@ -1,4 +1,4 @@
-import { compareAsc } from 'date-fns'
+import { compareDesc } from 'date-fns'
 import { NextApiHandler } from 'next'
 
 import dbConnect from 'server/utils/dbConnect'
@@ -21,7 +21,7 @@ const userRouter: NextApiHandler = async (request, response) => {
 
   const dates = registers.map(register => new Date(register.date))
 
-  dates.sort(compareAsc)
+  dates.sort(compareDesc)
 
   const lastRegister = dates[0]
 
